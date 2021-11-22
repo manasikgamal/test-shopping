@@ -8,7 +8,11 @@ export default class Size extends Component {
                 {this.props.size.map((pro,index)=>(
                     <div key={index}>
                     <p>{pro.id}</p>
-                     <p><Items chandedesable={this.props.chandedesable} type={pro.type} size={this.props.size} proid={this.props.proid} id={pro.id} onattributclick={this.props.onattributclick} items={pro.items}/></p>
+                     <p><Items fullitems={this.props.fullitems} 
+                     tocart={this.props.tocart} type={pro.type} 
+                     size={this.props.size} 
+                     proid={this.props.proid} 
+                     id={pro.id} onattributclick={this.props.onattributclick} items={pro.items}/></p>
                     </div>        
                 ))}
                 

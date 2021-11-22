@@ -387,14 +387,14 @@ right: 30px;
  }
  .bagdet{
    float: left;
-   width: 54%;
  }
  .bagbrand{
   font-size: 18px;
   padding-top: 5px;
  }
-  .bagtitle{
+  .frRowbagtitle{
    font-size: 18px;
+   display: table-row;
   }
   .bagimg img{
     width: 107px;
@@ -411,14 +411,8 @@ right: 30px;
     padding-top: 30px;
     padding-bottom: 9px;
   }
-  .bagmaxmin{
-    float: left;
-    width: 10%;
     
-  }
   .bagmaxmin button{
-    display: flex;
-    flex-direction: column;
     background-color: white;
    border: 1px solid;
    padding: 3px 6px;
@@ -428,13 +422,12 @@ right: 30px;
     margin-top: 35px;
   }
   .bagmax{
-    margin-top: 3px;
-    
+    margin-bottom: 35px;
   }
-  .bagmaxmin p{
+  .par{
     font-size: 18px;
     margin-top: 35px;
-    margin-left: 7px;
+
   }
   .bagsize button{
     padding: 3px 6px;
@@ -452,20 +445,15 @@ right: 30px;
   }
   .bagtotal p{
     font-weight: bold;
-    font-size: 18px;
+    font-size: 16px;
   }
   .bagtotal h{
     font-weight: bold;
-    margin-left: 150px;
+    margin-left: 14px;
   }
-  .bagtotal{
-    font-weight: bold;
-    display: flex;
-    padding-left: 15px;
-    padding-bottom: 27px;
-  }
+ 
   .bagbtn button{
-    padding: 10px 30px;
+    padding: 10px 25px;
     margin: 0 5px;
     font-weight: bold;
     font-size: 16px;
@@ -493,3 +481,55 @@ right: 30px;
    border: 1px solid;
    margin: 5px;
   }
+  .atname{
+    padding-top: 8px;
+    font-weight: bold;
+  }
+  .active{
+    background-color: rgb(25, 26, 24);
+    border: 1.5px solid rgb(25, 26, 24);
+    }
+    
+
+    .formItem {
+      margin: 5px;
+      display: table;
+    }
+    
+    .frRow {
+      display: table-row;
+    }
+    .frCell {
+      display: table-cell;
+      padding: 5px;
+  }
+    .wrapper {
+      width: 300px;
+      overflow: hidden; /* will contain if #first is longer than #second */
+      border: 1px solid white;
+  }
+  .firstdiv {
+      width: 150px;
+      float:left; /* add this */
+      padding-top: 15px;
+      border: 1px solid white;
+  }
+  .seconddiv {
+      float: left;
+      overflow: hidden; /* if you don't want #second to wrap below #first */
+      padding-top: 15px;
+      margin-right: 10px;
+      border: 1px solid white; 
+  }
+  .thirddiv {
+    overflow: hidden; 
+    width: 107px;
+  height: 142px;
+  padding-top: 15px;
+  border: 1px solid white; 
+}
+
+.thirddiv img{
+  width: 107px;
+  height: 142px;
+}
