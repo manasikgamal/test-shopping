@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom';
 import Currency from './Currency';
 export default class Header extends Component {
     constructor(props) {
@@ -68,9 +69,9 @@ export default class Header extends Component {
             <div>
          <div className="hcontainer">
           <ul>
-          <li><button onClick={this.boxClick} style={{borderBottom: this.state.bgColor,color:this.state.color}}> WOMEN</button></li>
-          <li><button onClick={this.boxClick1} style={{borderBottom: this.state.bgColor1,color:this.state.color1}}> MEN</button></li>
-          <li><button onClick={this.boxClick2} style={{borderBottom: this.state.bgColor2,color:this.state.color2}}> KIDS</button></li>
+        <Link to="/">  <li><button onClick={()=>{this.boxClick();this.props.changename("/")}} style={{borderBottom: this.state.bgColor,color:this.state.color}}> WOMEN</button></li></Link>
+        <Link to="/">  <li><button onClick={()=>{this.boxClick1();this.props.changename("clothes")}} style={{borderBottom: this.state.bgColor1,color:this.state.color1}}> MEN</button></li></Link>
+        <Link to="/"> <li><button onClick={()=>{this.boxClick2();this.props.changename("tech")}} style={{borderBottom: this.state.bgColor2,color:this.state.color2}}> KIDS</button></li></Link>
           </ul>
           <div className="refresh">
           <img src="/images/m1.PNG" alt=""/>
@@ -83,7 +84,7 @@ export default class Header extends Component {
             <button  onClick={()=>{this.props.currnvisible();this.props.iscurrnvisible?this.trans():this.trans2()}} style={{transform:this.state.tran}}>^</button>
             </div>
         {this.props.iscurrnvisible?
-         <Currency change={this.getCurrencySymbol}  onclick={this.props.onclick} currn={this.props.currency} />:""}
+         <Currency change={this.getCurrencySymbol} currnvisible={this.props.currnvisible}  onclick={this.props.onclick} currn={this.props.currency} />:""}
 
         </div>
         <div className='shop' onClick={this.props.isElVisible}>

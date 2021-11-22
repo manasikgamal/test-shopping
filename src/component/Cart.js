@@ -28,8 +28,9 @@ export default class Cart extends Component {
                                 <Price currn={this.props.currn} price={item.prices}/>
                                 </div>
                                 <div>
-                     {item.items.map((pro,index)=>(
+                     {item.attributes.map((pro,index)=>(
                     <div className="sizeshow" key={index}>
+                        <li className="atname">{pro.name}</li>
                      <li><button style={{backgroundColor:pro.type==="swatch"?pro.choose:"",
                      color:pro.type==="swatch"?pro.choose:"",
                      border:pro.type==="swatch"?"1px solid black":"",

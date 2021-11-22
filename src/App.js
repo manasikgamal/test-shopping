@@ -21,45 +21,30 @@ class App extends React.Component {
       currn:"USD",
       attribut:"",
       value:"",
-      disable:true,
-      items:[]
+      items:[],
+      name:"/"
     }}
-    chandedesable=(e)=>{
-     this.setState({disable:e})
+    changename=(name)=>{
+      this.setState({name:name})
     }
-    onattributclick=(value,pros,proid,size)=>{
+    onattributclick=(value,pros,proid,size,key)=>{
       const products=this.state.products.slice()
-      const newsize=localStorage.getItem('items')
-      ? JSON.parse(localStorage.getItem('items'))
-      : size
-      const mno=newsize.map(item=>(
-      item.id===pros?{...item,choose:value}:item 
-      ))
-      //localStorage.setItem("size",JSON.stringify(newsize)
-      localStorage.setItem("items",JSON.stringify(newsize.map(item=>(
-        item.id===pros?{...item,choose:value}:item
-      ))))
-      //this.setState({products})
-      this.setState ({products:products.map(item=>(
-       item.id===proid?{...item,items:mno}:item 
-     ))})
-     
+      products.forEach((pro)=>{
+          const newsize=localStorage.getItem('items') && pro.id===proid
+          ? JSON.parse(localStorage.getItem('items'))
+          : size
+          const mno=newsize.map(item=>(
+          item.id===pros?{...item,choose:value,key:key,ctr:1,proid:proid}:item
+          ))
+          //localStorage.setItem("size",JSON.stringify(newsize)
+          localStorage.setItem("items",JSON.stringify(newsize.map(item=>(
+            item.id===pros?{...item,choose:value,key:key,ctr:1,proid:proid}:item
+          ))))
+          this.setState ({products:products.map(item=>(
+           item.id===proid?{...item,attributes:mno}:item 
+         ))})
+      })
      }
-   full=()=>{
-    const pro=this.state.products.slice();
-    //const mno=pro.map(p=>p.attributes.map(a=>a.items.map(i=>i.value)))
-    
-    //mno.forEach((item)=>{item.value.push({soso:"soso"})})
-    //this.setState ({items:pro.map(p=>p.attributes.map(a=>a.items.map(i=>i.value))
-   // )})
-    console.log("mno",pro)
-    //console.log(this.state.items);
-   }
-    fullitems=(target)=>{
-      const pro=this.state.products[0].attributes[0].items.slice();
-      this.setState({items:target})
-      console.log(this.state.items)
-      }
     isElVisible=()=> {
       this.setState({isVisible: !this.state.isVisible});
       console.log(this.state.isVisible)
@@ -72,16 +57,18 @@ class App extends React.Component {
     const products=this.state.products.slice()
     this.setState({products})
    }
-
-   
     addtocart=(product)=>{
       const cartitems=this.state.cartitems.slice();
       let alreadyincart=false
       cartitems.forEach((item)=>{
         if(item.id===product.id){
-          item.count++;
-          alreadyincart=true
+          const pro=product.attributes.map(p=>p.choose)
+         const mno=item.attributes.map(a=>a.choose)
+         if(JSON.stringify(mno)===JSON.stringify(pro)){
+         item.count++;
+         alreadyincart=true
         }
+          }
       })
       if(!alreadyincart){
         cartitems.push({...product,count:1})
@@ -91,25 +78,44 @@ class App extends React.Component {
     }
     removefromcard=(product)=>{
       const cartitems=this.state.cartitems.slice();
-    const exist=cartitems.find((x)=>x.id===product.id)
-    if(exist.count===1){
-      this.setState({cartitems:cartitems.filter((x)=>x.id!==product.id)})
-      localStorage.setItem("cartitems",JSON.stringify(cartitems.filter((x)=>x.id!==product.id)))
-      const products=this.state.products.slice();
-      this.setState ({products:products.map(item=>(
-        item.id===product.id?{...item,icon:0}:item
-      ))})
-      localStorage.setItem("products",JSON.stringify(products.map(item=>(
-        item.id===product.id?{...item,icon:0}:item
-      ))))
+    //const exist=cartitems.find((x)=>x.attributes.map(a=>a.proid)===product.id)
+    cartitems.forEach(element=>{  
+      if(element.id===product.id)
+      if(JSON.stringify(element.attributes.map(a=>a.choose))
+    ===JSON.stringify(product.attributes.map(p=>p.choose))){
+      if(element.count===1){
+       // console.log("yes",exist)
+        this.setState({cartitems:cartitems.filter((x)=>x!==element)})
+        localStorage.setItem("cartitems",JSON.stringify(cartitems.filter((x)=>x!==element)))
+        const products=this.state.products.slice();
+        let n=0
+        cartitems.forEach((item)=>{
+          if(item.id===product.id)
+          n++
+        })
+        if(n===1)
+        {
+        this.setState ({products:products.map(item=>(
+          item.id===product.id?{...item,icon:0}:item
+        ))})
+        localStorage.setItem("products",JSON.stringify(products.map(item=>(
+          item.id===product.id?{...item,icon:0}:item
+        ))))
+      }
+      }
+      else{
+        this.setState({cartitems:cartitems.map((x)=>x.id===product.id &&
+        JSON.stringify(x.attributes.map(a=>a.choose))===JSON.stringify(product.attributes.map(p=>p.choose))?
+        {...element,count:element.count-1}:x)
+      })
+      localStorage.setItem("cartitems",JSON.stringify(cartitems.map((x)=>x.id===product.id &&
+      JSON.stringify(x.attributes.map(a=>a.choose))===JSON.stringify(product.attributes.map(p=>p.choose))?
+      {...element,count:element.count-1}:x)))
+      }}
+
     }
-    else{
-      this.setState({cartitems:cartitems.map((x)=>x.id===product.id?
-      {...exist,count:exist.count-1}:x)
-    })
-    localStorage.setItem("cartitems",JSON.stringify(cartitems.map((x)=>x.id===product.id?
-    {...exist,count:exist.count-1}:x)))
-    }
+    )
+    
   }
     addicon=(product)=>{
      // const products=this.state.products.slice();
@@ -117,12 +123,11 @@ class App extends React.Component {
       ? JSON.parse(localStorage.getItem('products'))
       : this.state.products.slice()
       this.setState ({products:products.map(item=>(
-        item.id===product.id?{...item,icon:1}:item
+        item.id===product.id?{...item,icon:1,ctr:0}:item
       ))})
       localStorage.setItem("products",JSON.stringify(products.map(item=>(
-        item.id===product.id?{...item,icon:1}:item
+        item.id===product.id?{...item,icon:1,ctr:0}:item
       ))))
-      console.log(products)
     }
     getCurrencySymbol=(locale, currency)=> {
       return (0).toLocaleString(
@@ -137,26 +142,26 @@ class App extends React.Component {
     }
     
   render(){
-  this.full()
+
     return (
       <div>
         <div>
         </div>
         <header>
-          <Header iscurrnvisible={this.state.iscurrnvisible} currn={this.state.currn} currnvisible={this.iscurrnv} currency={this.state.products} onclick={this.changecurrn} cartitems={this.state.cartitems} isElVisible={this.isElVisible}/>
+          <Header changename={this.changename} iscurrnvisible={this.state.iscurrnvisible} currn={this.state.currn} currnvisible={this.iscurrnv} currency={this.state.products} onclick={this.changecurrn} cartitems={this.state.cartitems} isElVisible={this.isElVisible}/>
           {this.state.isVisible? <Bag isElVisible={this.isElVisible} currn={this.state.currn} getCurrencySymbol={this.getCurrencySymbol} cartitems={this.state.cartitems} 
           addtocart={this.addtocart} removefromcard={this.removefromcard} /> : '' } 
         </header>
         <Route path='/' exact>
         <main>
         <div className={this.state.isVisible? "container":""}>
-         <Products getCurrencySymbol={this.getCurrencySymbol} currn={this.state.currn} products={this.state.products} isVisible={this.state.isVisible} ></Products>
+         <Products name={this.state.name} addchose={this.addchose} getCurrencySymbol={this.getCurrencySymbol} currn={this.state.currn} products={this.state.products} isVisible={this.state.isVisible} ></Products>
         </div>
         </main>
        </Route>
        <div className={this.state.isVisible? "container":""}>
        <Route path={'/description/:id'} >
-         <Description chandedesable={this.chandedesable} disable={this.state.disable} fullitems={this.fullitems} onattributclick={this.onattributclick} description={this.state.products} addtocart={this.addtocart} addicon={this.addicon}
+         <Description deletectr={this.deletectr}  tocart={this.tocart} disable={this.state.disable} onattributclick={this.onattributclick} description={this.state.products} addtocart={this.addtocart} addicon={this.addicon}
         isVisible={this.state.isVisible} currn={this.state.currn}/>
        </Route>
        </div>
@@ -175,10 +180,12 @@ class App extends React.Component {
 const getproduct= gql`
 {
   category{
+    name
     products{
         id
       name
       brand
+      category
       gallery
      prices {
       currency

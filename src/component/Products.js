@@ -9,7 +9,8 @@ export default class Products extends Component {
                 <h>Category name</h>
                 </div>
                 <ul className="products">
-                    {this.props.products.map(product=>(
+                    {this.props.products.filter(p=>p.category===this.props.name?
+                    {...p}:this.props.name==="/"&&p.category===p.category?{...p}:"").map(product=>(
                         <li key={product.id}>
                             <div className="icon-pos">
                             <div className={product.icon===1?"product card cardstyle":"product card"}>
